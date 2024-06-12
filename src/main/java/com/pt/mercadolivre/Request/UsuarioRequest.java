@@ -11,6 +11,7 @@ public class UsuarioRequest {
 
 
     @NotBlank
+    @NotNull
     String login;
 
     @NotBlank
@@ -47,7 +48,7 @@ public class UsuarioRequest {
     public UsuarioRequest() {
     }
 
-    public UsuarioRequest(@NotBlank String login, @NotBlank String senha, LocalDate instante) {
+    public UsuarioRequest(@NotBlank @NotNull String login, @NotBlank String senha, LocalDate instante) {
         this.login = login;
         this.senha = senha;
         this.instante = instante;
