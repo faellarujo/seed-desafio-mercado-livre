@@ -1,5 +1,6 @@
 package com.pt.mercadolivre.globalExceptionHandler;
 
+import com.pt.mercadolivre.exception.senhaVazia;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,6 +20,11 @@ public class CustomValidationExceptionHandler {
         Map<String, String> errors = new HashMap<>(); //1
         ex.getBindingResult().getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(senhaVazia.class)
+    public ResponseEntity<String> senhaVazia(senhaVazia ex) {
+        return ResponseEntity.status(400).body(ex.getMessage());
     }
 
 //    @ExceptionHandler(EmailExistsException.class)//1
