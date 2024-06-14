@@ -1,12 +1,12 @@
 package com.pt.mercadolivre.Request;
 
+
 import com.pt.mercadolivre.exception.senhaVazia;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 
-import javax.swing.*;
 import java.time.LocalDate;
 
 public class UsuarioRequest {
@@ -18,7 +18,7 @@ public class UsuarioRequest {
     private String login;
 
 
-    private char[] senha;
+    private String senha;
 
     @NotNull
     @PastOrPresent
@@ -32,11 +32,11 @@ public class UsuarioRequest {
         this.login = login;
     }
 
-    public char[] getSenha() {
+    public String getSenha() {
         return senha;
     }
 
-    public void setSenha(char[] senha) {
+    public void setSenha(String senha) {
            this.senha = validaSenha(senha);
        }
 
@@ -52,7 +52,7 @@ public class UsuarioRequest {
     public UsuarioRequest() {
     }
 
-    public UsuarioRequest(@NotBlank @NotNull String login, char[] senha, @NotNull @PastOrPresent LocalDate instante) {
+    public UsuarioRequest(@NotBlank @NotNull String login, String senha, @NotNull @PastOrPresent LocalDate instante) {
         this.login = login;
         this.senha = senha;
         this.instante = instante;
@@ -67,9 +67,9 @@ public class UsuarioRequest {
                 '}';
     }
 
-    private char[] validaSenha(char[] senha) {
+    private String validaSenha(String senha) {
         try {
-            if (senha.length < 6) {
+            if (senha.length() < 6) {
                 throw new senhaVazia("Senha deve ter no mínimo 6 caracteres");
             }
         } catch (NullPointerException e) {
