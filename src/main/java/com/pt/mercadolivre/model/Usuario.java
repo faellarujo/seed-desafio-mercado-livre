@@ -1,6 +1,10 @@
 package com.pt.mercadolivre.model;
 
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class Usuario {
@@ -16,9 +20,18 @@ public class Usuario {
         @Column(name = "senha", nullable = false)
         private String senha;
 
-        public Usuario(String login, String senha) {
+        @Column(name = "instante", nullable = false)
+        LocalDateTime instante = LocalDateTime.now();
+
+        public Usuario() {
+        }
+
+
+
+        public Usuario(String login, String senha, LocalDateTime instante) {
             this.login = login;
             this.senha = senha;
+            this.instante = instante;
         }
 
         public String getLogin() {
@@ -27,5 +40,9 @@ public class Usuario {
 
         public String getSenha() {
             return senha;
+        }
+
+        public LocalDateTime getInstante() {
+            return instante;
         }
 }

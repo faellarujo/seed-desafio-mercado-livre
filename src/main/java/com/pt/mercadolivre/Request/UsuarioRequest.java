@@ -2,12 +2,15 @@ package com.pt.mercadolivre.Request;
 
 
 import com.pt.mercadolivre.exception.senhaVazia;
+import com.pt.mercadolivre.model.Usuario;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class UsuarioRequest {
 
@@ -17,11 +20,13 @@ public class UsuarioRequest {
     @Email
     private String login;
 
+    @NotBlank
+    @Length(min = 6)
     private String senha;
 
     @NotNull
     @PastOrPresent
-    LocalDate instante = LocalDate.now();
+    LocalDateTime instante = LocalDateTime.now();
 
     public String getLogin() {
         return login;
@@ -36,22 +41,22 @@ public class UsuarioRequest {
     }
 
     public void setSenha(String senha) {
-           this.senha = validaSenha(senha);
+           this.senha = senha;
        }
 
 
-    public LocalDate getInstante() {
+    public LocalDateTime getInstante() {
         return instante;
     }
 
-    public void setInstante(LocalDate instante) {
+    public void setInstante(LocalDateTime instante) {
         this.instante = instante;
     }
 
     public UsuarioRequest() {
     }
 
-    public UsuarioRequest(@NotBlank @NotNull String login, String senha, @NotNull @PastOrPresent LocalDate instante) {
+    public UsuarioRequest(@NotBlank @NotNull String login, @NotBlank @Length(min = 6) String senha, @NotNull @PastOrPresent LocalDateTime instante) {
         this.login = login;
         this.senha = senha;
         this.instante = instante;
@@ -66,14 +71,7 @@ public class UsuarioRequest {
                 '}';
     }
 
-    private String validaSenha(String senha) {
-        try {
-            if (senha.length() < 6) {
-                throw new senhaVazia("Senha deve ter no mínimo 6 caracteres");
-            }
-        } catch (NullPointerException e) {
-            throw new senhaVazia("Senha não pode ser null");
-        }
-        return senha;
+    public Usuario toModel() {
+        return new Usuario(this.login, this.senha, this.instante);
     }
 }
