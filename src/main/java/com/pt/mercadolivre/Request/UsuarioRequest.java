@@ -17,7 +17,6 @@ public class UsuarioRequest {
     @Email
     private String login;
 
-
     private String senha;
 
     @NotNull
