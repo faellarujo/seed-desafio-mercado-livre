@@ -1,6 +1,8 @@
 package com.pt.mercadolivre.Controller;
 
 import com.pt.mercadolivre.Request.UsuarioRequest;
+import com.pt.mercadolivre.model.Usuario;
+import com.pt.mercadolivre.repository.UsuarioRepository;
 import com.pt.mercadolivre.service.UserService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -19,12 +21,14 @@ public class UsuarioController {
     @PersistenceContext
     private EntityManager manager; //2
 
+    @Autowired
+    private UsuarioRepository usuarioRepository; //3
 
 
     @PostMapping("/usuario")
     @Transactional
     public UsuarioRequest cadastrarUsuario(@RequestBody @Valid UsuarioRequest request){
-        request.setSenha(userService.encodePassword(request.getSenha()));
+        userService.validaUsuarioLogin(request.getLogin());
         manager.persist(request.toModel());
         return request;
     }
