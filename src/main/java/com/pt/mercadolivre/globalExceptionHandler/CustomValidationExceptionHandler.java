@@ -1,5 +1,6 @@
 package com.pt.mercadolivre.globalExceptionHandler;
 
+import com.pt.mercadolivre.exception.CategoriaExisteException;
 import com.pt.mercadolivre.exception.EmailExistsException;
 import com.pt.mercadolivre.exception.senhaVazia;
 import org.springframework.http.HttpStatus;
@@ -33,12 +34,12 @@ public class CustomValidationExceptionHandler {
         return ResponseEntity.status(400).body(ex.getMessage());
     }
 
-//    @ExceptionHandler(CategoriaExisteException.class)//1
-//    public ResponseEntity<String> categoriaExistsException(CategoriaExisteException ex) {
-//        return ResponseEntity.status(400).body(ex.getMessage());
-//    }
-//
-//
+    @ExceptionHandler(CategoriaExisteException.class)//1
+    public ResponseEntity<String> categoriaExistsException(CategoriaExisteException ex) {
+        return ResponseEntity.status(400).body(ex.getMessage());
+    }
+
+
 //    @ExceptionHandler(LivroExistException.class)//1
 //    public ResponseEntity<String> livroExistsException(LivroExistException ex) {
 //        return ResponseEntity.status(400).body(ex.getMessage());

@@ -1,7 +1,6 @@
 package com.pt.mercadolivre.Controller;
 
 import com.pt.mercadolivre.Request.UsuarioRequest;
-import com.pt.mercadolivre.model.Usuario;
 import com.pt.mercadolivre.repository.UsuarioRepository;
 import com.pt.mercadolivre.service.UserService;
 import jakarta.persistence.EntityManager;
@@ -29,7 +28,7 @@ public class UsuarioController {
     @Transactional
     public UsuarioRequest cadastrarUsuario(@RequestBody @Valid UsuarioRequest request){
         userService.validaUsuarioLogin(request.getLogin());
-        manager.persist(request.toModel());
+        usuarioRepository.save(request.toModel());
         return request;
     }
 }
