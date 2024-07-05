@@ -1,15 +1,14 @@
 package com.pt.mercadolivre.Request;
 
 
-import com.pt.mercadolivre.exception.senhaVazia;
-import com.pt.mercadolivre.model.Usuario;
+import com.pt.mercadolivre.model.User;
+import com.pt.mercadolivre.model.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import org.hibernate.validator.constraints.Length;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class UsuarioRequest {
@@ -18,30 +17,30 @@ public class UsuarioRequest {
     @NotBlank
     @NotNull
     @Email
-    private String login;
+    private String username;
 
     @NotBlank
     @Length(min = 6)
-    private String senha;
+    private String password;
 
     @NotNull
     @PastOrPresent
     LocalDateTime instante = LocalDateTime.now();
 
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getPassword() {
+        return password;
     }
 
-    public void setSenha(String senha) {
-           this.senha = senha;
+    public void setPassword(String password) {
+           this.password = password;
        }
 
 
@@ -56,22 +55,22 @@ public class UsuarioRequest {
     public UsuarioRequest() {
     }
 
-    public UsuarioRequest(@NotBlank @NotNull String login, @NotBlank @Length(min = 6) String senha, @NotNull @PastOrPresent LocalDateTime instante) {
-        this.login = login;
-        this.senha = senha;
+    public UsuarioRequest(@NotBlank @NotNull String username, @NotBlank @Length(min = 6) String password, @NotNull @PastOrPresent LocalDateTime instante) {
+        this.username = username;
+        this.password = password;
         this.instante = instante;
     }
 
     @Override
     public String toString() {
         return "UsuarioRequest{" +
-                "login='" + login + '\'' +
-                ", senha='" + senha + '\'' +
+                "login='" + username + '\'' +
+                ", senha='" + password + '\'' +
                 ", instante=" + instante +
                 '}';
     }
 
-    public Usuario toModel() {
-        return new Usuario(this.login, this.senha, this.instante);
+    public User toModel() {
+        return new User(username, password);
     }
 }

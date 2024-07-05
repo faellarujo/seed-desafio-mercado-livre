@@ -2,7 +2,6 @@ package com.pt.mercadolivre.Controller;
 
 import com.pt.mercadolivre.Request.UsuarioRequest;
 import com.pt.mercadolivre.repository.UsuarioRepository;
-import com.pt.mercadolivre.service.UserService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -14,8 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class UsuarioController {
 
 
-    @Autowired
-    private UserService userService; //1
+
 
     @PersistenceContext
     private EntityManager manager; //2
@@ -27,8 +25,7 @@ public class UsuarioController {
     @PostMapping("/usuario")
     @Transactional
     public UsuarioRequest cadastrarUsuario(@RequestBody @Valid UsuarioRequest request){
-        userService.validaUsuarioLogin(request.getLogin());
-        usuarioRepository.save(request.toModel());
+        manager.persist(request.toModel());
         return request;
     }
 }
