@@ -38,23 +38,6 @@ public class SecurityConfig {
     @Value("${jwt.private.key}")
     private RSAPrivateKey priv;
 
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http
-//                .csrf(csrf -> csrf.disable())
-//                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin())) // Permitir frames
-//                .authorizeHttpRequests( requests -> requests
-//                        .requestMatchers(HttpMethod.POST, "/usuario").permitAll()
-//                        .requestMatchers(HttpMethod.POST, "/categoria").permitAll()
-//                        .requestMatchers(HttpMethod.POST, "/subcategoria").permitAll()
-//                        .requestMatchers(HttpMethod.POST, "/authca").permitAll()
-//                        .requestMatchers("/h2-console/**").permitAll())
-//                .sessionManagement(sessionManagement -> sessionManagement
-//                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                        .httpBasic(Customizer.withDefaults());
-//
-//        return http.build();
-//    }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -64,6 +47,8 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET,"/private")
                                 .permitAll()
                                 .requestMatchers(HttpMethod.POST,"/usuario")
+                                .permitAll()
+                                .requestMatchers(HttpMethod.POST,"/produto")
                                 .permitAll()
                                 .requestMatchers("/authenticate")
                                 .permitAll()
