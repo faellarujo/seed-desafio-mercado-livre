@@ -1,28 +1,32 @@
-package com.pt.mercadolivre.Request;
-
-import com.pt.mercadolivre.model.Caracteristica;
-import com.pt.mercadolivre.model.Tamanho;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
-public class CaracteristicaRequest {
-
-    // Pelo menos 03 atributos
+package com.pt.mercadolivre.model;
 
 
-    @NotNull
+import jakarta.persistence.*;
+
+@Entity
+public class Caracteristica {
+
+    @Id
+    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "peso")
     private Double peso;
 
-    @NotBlank
+    @Column(name = "cor")
     private String cor;
 
-    @NotNull
+    @Column(name = "tamanho")
+    @Enumerated(EnumType.STRING)
     private Tamanho tamanho;
 
-    public CaracteristicaRequest() {
+
+
+    public Caracteristica() {
     }
 
-    public CaracteristicaRequest(@NotNull Double peso, @NotBlank String cor, @NotNull Tamanho tamanho) {
+
+    public Caracteristica(Double peso, String cor, Tamanho tamanho) {
         this.peso = peso;
         this.cor = cor;
         this.tamanho = tamanho;
@@ -54,14 +58,11 @@ public class CaracteristicaRequest {
 
     @Override
     public String toString() {
-        return "CaracteristicaRequest{" +
+        return "Caracteristica{" +
                 "nome='" + peso + '\'' +
                 ", cor='" + cor + '\'' +
                 ", tamanho=" + tamanho +
                 '}';
     }
 
-    public Caracteristica toModel() {
-        return new Caracteristica(peso, cor, tamanho);
-    }
 }

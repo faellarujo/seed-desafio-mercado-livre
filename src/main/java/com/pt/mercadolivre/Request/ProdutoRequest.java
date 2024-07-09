@@ -1,8 +1,10 @@
 package com.pt.mercadolivre.Request;
 
-import jakarta.validation.Valid;
+import com.pt.mercadolivre.model.Caracteristica;
+import com.pt.mercadolivre.model.Categoria;
+import com.pt.mercadolivre.model.Produto;
+import jakarta.persistence.EntityManager;
 import jakarta.validation.constraints.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -16,11 +18,11 @@ public class ProdutoRequest {
     private Double valor;
 
     @NotNull
+    @Min(1)
     private Integer quantidade;
 
     @NotNull
-    @Valid
-    private CaracteristicaRequest caracteristica;
+    private Long idCaracteristica;
 
     @NotBlank
     @Size(max = 1000)
@@ -32,6 +34,19 @@ public class ProdutoRequest {
     @NotNull
     @PastOrPresent
     LocalDateTime instante = LocalDateTime.now();
+
+    public ProdutoRequest() {
+    }
+
+    public ProdutoRequest(@NotBlank String nome, @NotNull @Min(1) Double valor, @NotNull @Min(1) Integer quantidade, @NotNull Long idCaracteristica, @NotBlank @Size(max = 1000) String descricao, @NotNull Long idCategoria, @NotNull @PastOrPresent LocalDateTime instante) {
+        this.nome = nome;
+        this.valor = valor;
+        this.quantidade = quantidade;
+        this.idCaracteristica = idCaracteristica;
+        this.descricao = descricao;
+        this.idCategoria = idCategoria;
+        this.instante = instante;
+    }
 
     public @NotBlank String getNome() {
         return nome;
@@ -57,12 +72,12 @@ public class ProdutoRequest {
         this.quantidade = quantidade;
     }
 
-    public @NotNull @Valid CaracteristicaRequest getCaracteristica() {
-        return caracteristica;
+    public @NotNull Long getIdCaracteristica() {
+        return idCaracteristica;
     }
 
-    public void setCaracteristica(@NotNull @Valid CaracteristicaRequest caracteristica) {
-        this.caracteristica = caracteristica;
+    public void setIdCaracteristica(@NotNull Long idCaracteristica) {
+        this.idCaracteristica = idCaracteristica;
     }
 
     public @NotBlank @Size(max = 1000) String getDescricao() {
@@ -96,10 +111,15 @@ public class ProdutoRequest {
                 "nome='" + nome + '\'' +
                 ", valor=" + valor +
                 ", quantidade=" + quantidade +
-                ", caracteristica=" + caracteristica +
+                ", caracteristica=" + idCaracteristica +
                 ", descricao='" + descricao + '\'' +
                 ", idCategoria=" + idCategoria +
                 ", instante=" + instante +
                 '}';
+    }
+
+    public Produto toModel(EntityManager manager) {
+        return new Produto(nome, valor, quantidade, manager.find(Caracteristica.class, idCaracteristica), descricao, manager.find(Categoria.class, idCategoria), instante);
+
     }
 }

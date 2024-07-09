@@ -5,6 +5,7 @@ import com.pt.mercadolivre.exception.EmailExistsException;
 import com.pt.mercadolivre.exception.senhaVazia;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -22,6 +23,13 @@ public class CustomValidationExceptionHandler {
         Map<String, String> errors = new HashMap<>(); //1
         ex.getBindingResult().getFieldErrors().forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
+        // Aqui você pode extrair mais detalhes do erro, se necessário, e personalizar a mensagem de erro
+        String errorMessage = "Valores aceitos para a propriedade tamanho Enum class: [P, M, G, GG, XG]";
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(senhaVazia.class)
