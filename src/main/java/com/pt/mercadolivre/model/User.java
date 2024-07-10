@@ -30,8 +30,6 @@ public class User{
     public User(String username, String password) {
         this.username = username;
         this.password = new BCryptPasswordEncoder().encode(password);
-
-
     }
 
     public String getUsername() {
