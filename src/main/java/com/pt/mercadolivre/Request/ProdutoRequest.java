@@ -2,11 +2,14 @@ package com.pt.mercadolivre.Request;
 
 import com.pt.mercadolivre.model.Caracteristica;
 import com.pt.mercadolivre.model.Categoria;
+import com.pt.mercadolivre.model.ImagemProduto;
 import com.pt.mercadolivre.model.Produto;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.URL;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 public class ProdutoRequest {
 
@@ -31,6 +34,8 @@ public class ProdutoRequest {
     @NotNull
     private Long idCategoria;
 
+    private Long idImagem;
+
     @NotNull
     @PastOrPresent
     LocalDateTime instante = LocalDateTime.now();
@@ -38,7 +43,7 @@ public class ProdutoRequest {
     public ProdutoRequest() {
     }
 
-    public ProdutoRequest(@NotBlank String nome, @NotNull @Min(1) Double valor, @NotNull @Min(1) Integer quantidade, @NotNull Long idCaracteristica, @NotBlank @Size(max = 1000) String descricao, @NotNull Long idCategoria, @NotNull @PastOrPresent LocalDateTime instante) {
+    public ProdutoRequest(@NotBlank String nome, @NotNull @Min(1) Double valor, @NotNull @Min(1) Integer quantidade, @NotNull Long idCaracteristica, @NotBlank @Size(max = 1000) String descricao, @NotNull Long idCategoria, @NotNull @PastOrPresent LocalDateTime instante, Long idImagem) {
         this.nome = nome;
         this.valor = valor;
         this.quantidade = quantidade;
@@ -46,6 +51,7 @@ public class ProdutoRequest {
         this.descricao = descricao;
         this.idCategoria = idCategoria;
         this.instante = instante;
+        this.idImagem = idImagem;
     }
 
     public @NotBlank String getNome() {
@@ -104,6 +110,14 @@ public class ProdutoRequest {
         this.instante = instante;
     }
 
+    public Long getIdImagem() {
+        return idImagem;
+    }
+
+    public void setIdImagem(Long idImagem) {
+        this.idImagem = idImagem;
+    }
+
 
     @Override
     public String toString() {
@@ -115,11 +129,19 @@ public class ProdutoRequest {
                 ", descricao='" + descricao + '\'' +
                 ", idCategoria=" + idCategoria +
                 ", instante=" + instante +
+                ", idImagem=" + idImagem +
                 '}';
     }
 
     public Produto toModel(EntityManager manager) {
-        return new Produto(nome, valor, quantidade, manager.find(Caracteristica.class, idCaracteristica), descricao, manager.find(Categoria.class, idCategoria), instante);
+        Caracteristica caracteristica = manager.find(Caracteristica.class, idCaracteristica);
+        Categoria categoria = manager.find(Categoria.class, idCategoria);
+        Optional<ImagemProduto> imagem = Optional.ofNullable(idImagem).map(id -> manager.find(ImagemProduto.class, id));
 
+        if (caracteristica == null || categoria == null) {
+            throw new IllegalArgumentException("Caracteristica, Categoria, or ImagemProduto not found");
+        }
+
+        return new Produto(nome, valor, quantidade, caracteristica, descricao, categoria, instante, imagem.orElse(null));
     }
 }
