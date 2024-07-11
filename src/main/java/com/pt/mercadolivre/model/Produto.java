@@ -42,11 +42,15 @@ public class Produto {
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
     private List<ImagemProduto> linkImagem = new ArrayList<>();
 
+    @OneToOne
+    @JoinColumn(name = "usuario_id")
+    private User usuario;
+
+
     public Produto() {
     }
 
-
-    public Produto(String nome, Double valor, Integer quantidade, Caracteristica caracteristica, String descricao, Categoria categoria, LocalDateTime instante, ImagemProduto linkImagem) {
+    public Produto(String nome, Double valor, Integer quantidade, Caracteristica caracteristica, String descricao, Categoria categoria, LocalDateTime instante, ImagemProduto linkImagem, User usuario) {
         this.nome = nome;
         this.valor = valor;
         this.quantidade = quantidade;
@@ -55,8 +59,8 @@ public class Produto {
         this.categoria = categoria;
         this.instante = instante;
         this.linkImagem.add(linkImagem);
+        this.usuario = usuario;
     }
-
 
     public Long getId() {
         return id;
@@ -131,6 +135,14 @@ public class Produto {
         this.linkImagem = linkImagem;
     }
 
+    public User getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(User usuario) {
+        this.usuario = usuario;
+    }
+
     @Override
     public String toString() {
         return "Produto{" +
@@ -143,6 +155,7 @@ public class Produto {
                 ", categoria=" + categoria +
                 ", instante=" + instante +
                 ", linkImagem=" + linkImagem +
+                ", usuario=" + usuario +
                 '}';
     }
 }

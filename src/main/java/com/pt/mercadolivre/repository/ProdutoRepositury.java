@@ -1,13 +1,13 @@
 package com.pt.mercadolivre.repository;
 
-import com.pt.mercadolivre.model.User;
+import com.pt.mercadolivre.model.Produto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<User, Long> {
+public interface ProdutoRepositury extends JpaRepository<Produto, Long> {
 
-    Optional<User> findByUsername(String username);
+    public Optional<Produto> findById (Long id);
 }

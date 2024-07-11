@@ -49,12 +49,11 @@ public class CustomValidationExceptionHandler {
     public ResponseEntity<String> livroExistsException(ProdutoExistException ex) {
         return ResponseEntity.status(400).body(ex.getMessage());
     }
-//
-//
-//    @ExceptionHandler(DocumentoInvalido.class)//1
-//    public ResponseEntity<String> DocumentoInvalido(LivroExistException ex) {
-//        return ResponseEntity.status(400).body(ex.getMessage());
-//    }
+
+    @ExceptionHandler(UserNotPermission.class)//1
+    public ResponseEntity<String> UsuarioSemPermissaoParaInserirIMG(UserNotPermission ex) {
+        return ResponseEntity.status(403).body(ex.getMessage());
+    }
 //
 //
 //    @ExceptionHandler(EstadoExistsException.class)//1
