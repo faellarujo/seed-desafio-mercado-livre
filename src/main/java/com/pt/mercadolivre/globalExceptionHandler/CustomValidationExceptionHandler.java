@@ -54,17 +54,17 @@ public class CustomValidationExceptionHandler {
     public ResponseEntity<String> UsuarioSemPermissaoParaInserirIMG(UserNotPermission ex) {
         return ResponseEntity.status(403).body(ex.getMessage());
     }
-//
-//
-//    @ExceptionHandler(EstadoExistsException.class)//1
-//    public ResponseEntity<String> EstadoDeSerInformado(EstadoExistsException ex) {
-//        return ResponseEntity.status(400).body(ex.getMessage());
-//    }
-//
-//    @ExceptionHandler(CarrinhoSemItens.class)//1
-//    public ResponseEntity<String> CarrinhoSemItens(CarrinhoSemItens ex) {
-//        return ResponseEntity.status(400).body(ex.getMessage());
-//    }
+
+
+    @ExceptionHandler(Notavaluemustbebetween1and5.class)//1
+    public ResponseEntity<String> Notavaluemustbebetween1and5(Notavaluemustbebetween1and5 ex) {
+        return ResponseEntity.status(400).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidNotavalue.class)//1
+    public ResponseEntity<String> InvalidNotavalue(InvalidNotavalue ex) {
+        return ResponseEntity.status(400).body(ex.getMessage());
+    }
 //
 //    @ExceptionHandler(valorTotalDoCarrinhoNaoConfereComValorTotaldaCompra.class)//1
 //    public ResponseEntity<String> valorTotalDoCarrinhoNaoConfereComValorTotaldaCompra(valorTotalDoCarrinhoNaoConfereComValorTotaldaCompra ex) {
