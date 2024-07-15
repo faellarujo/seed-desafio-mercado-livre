@@ -45,8 +45,8 @@ public class CustomValidationExceptionHandler {
         return ResponseEntity.status(400).body(ex.getMessage());
     }
 
-    @ExceptionHandler(ProdutoExistException.class)//1
-    public ResponseEntity<String> livroExistsException(ProdutoExistException ex) {
+    @ExceptionHandler(ProdutoNotExistException.class)//1
+    public ResponseEntity<String> livroExistsException(ProdutoNotExistException ex) {
         return ResponseEntity.status(400).body(ex.getMessage());
     }
 
@@ -65,11 +65,11 @@ public class CustomValidationExceptionHandler {
     public ResponseEntity<String> InvalidNotavalue(InvalidNotavalue ex) {
         return ResponseEntity.status(400).body(ex.getMessage());
     }
-//
-//    @ExceptionHandler(valorTotalDoCarrinhoNaoConfereComValorTotaldaCompra.class)//1
-//    public ResponseEntity<String> valorTotalDoCarrinhoNaoConfereComValorTotaldaCompra(valorTotalDoCarrinhoNaoConfereComValorTotaldaCompra ex) {
-//        return ResponseEntity.status(400).body(ex.getMessage());
-//    }
+
+    @ExceptionHandler(UserNotExistException.class)//1
+    public ResponseEntity<String> UsuarioInexistente(UserNotExistException ex) {
+        return ResponseEntity.status(400).body(ex.getMessage());
+    }
 //
 //
 //    @ExceptionHandler(ValorIncorretoException.class)//1

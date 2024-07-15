@@ -1,6 +1,6 @@
 package com.pt.mercadolivre.Request;
 
-import com.pt.mercadolivre.exception.ProdutoExistException;
+import com.pt.mercadolivre.exception.ProdutoNotExistException;
 import com.pt.mercadolivre.model.ImagemProduto;
 import com.pt.mercadolivre.model.Produto;
 import jakarta.persistence.EntityManager;
@@ -56,7 +56,7 @@ public class ImagemRequest {
     public ImagemProduto toModel(EntityManager manager) {
         final Optional<Produto> imagemProduto = Optional.ofNullable(manager.find(Produto.class, idProduto));
         if (imagemProduto == null) {
-            throw new ProdutoExistException("Produto não encontrado");
+            throw new ProdutoNotExistException("Produto não encontrado");
         }
         return new ImagemProduto(linkImagem, imagemProduto.get());
     }

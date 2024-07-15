@@ -1,16 +1,21 @@
 package com.pt.mercadolivre.Request;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.pt.mercadolivre.model.Nota;
-import com.pt.mercadolivre.util.NotaDeserializer;
-import jakarta.validation.Valid;
+import com.pt.mercadolivre.exception.ProdutoNotExistException;
+import com.pt.mercadolivre.exception.UserNotExistException;
+import com.pt.mercadolivre.model.Opiniao;
+import com.pt.mercadolivre.model.Produto;
+import com.pt.mercadolivre.model.User;
+import jakarta.persistence.EntityManager;
 import jakarta.validation.constraints.*;
+
+import java.util.Optional;
 
 public class OpiniaoRequest {
 
     @NotNull
-    @JsonDeserialize(using = NotaDeserializer.class)
-    private Nota nota;
+    @Min(1)
+    @Max(5)
+    private int nota;
 
     @NotBlank
     private String titulo;
@@ -28,7 +33,7 @@ public class OpiniaoRequest {
     public OpiniaoRequest() {
     }
 
-    public OpiniaoRequest(Nota nota, String titulo, String descricao, Long idProduto, Long idUsuario) {
+    public OpiniaoRequest(int nota, String titulo, String descricao, Long idProduto, Long idUsuario) {
         this.nota = nota;
         this.titulo = titulo;
         this.descricao = descricao;
@@ -36,7 +41,7 @@ public class OpiniaoRequest {
         this.idUsuario = idUsuario;
     }
 
-    public Nota getNota() {
+    public int getNota() {
         return nota;
     }
 
@@ -65,6 +70,10 @@ public class OpiniaoRequest {
                 ", idProduto=" + idProduto +
                 ", idUsuario=" + idUsuario +
                 '}';
+    }
+
+    public Opiniao toModel(Produto produto, User usuario) {
+        return new Opiniao(titulo, descricao, nota, produto, usuario);
     }
 
 }
