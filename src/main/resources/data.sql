@@ -7,6 +7,7 @@ INSERT INTO caracteristica (peso, cor, tamanho) VALUES (2.5, 'Amarelo', 'M');
 INSERT INTO caracteristica (peso, cor, tamanho) VALUES (3.5, 'Azul', 'GG');
 INSERT INTO caracteristica (peso, cor, tamanho) VALUES (3.5, 'Azul', 'P');
 INSERT INTO caracteristica (peso, cor, tamanho) VALUES (3.5, 'Azul', 'XG');
+INSERT INTO vendedor (email, nome, senha) VALUES ('Raphael', 'raphaelaraujo.ti@gmail.com','123456');
 
 
 
