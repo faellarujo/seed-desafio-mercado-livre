@@ -8,6 +8,7 @@ import com.pt.mercadolivre.model.Produto;
 import com.pt.mercadolivre.model.User;
 import com.pt.mercadolivre.model.Vendedor;
 import com.pt.mercadolivre.repository.UsuarioRepository;
+import com.pt.mercadolivre.util.EnviaEmail;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -42,6 +43,7 @@ public class PerguntaParaVendedorController {
         User user = usuarioRepository.findByUsername(authentication.getName()).get();
         final Pergunta model = request.toModel(produto, vendedor, user);
         manager.persist(model);
+        EnviaEmail.enviaEmail(vendedor.getEmail(), "Nova pergunta sobre o produto: " + produto.getNome(), model.getDescricao());
         return model.toString();
     }
 }

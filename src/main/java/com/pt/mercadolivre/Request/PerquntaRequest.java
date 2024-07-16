@@ -25,20 +25,16 @@ public class PerquntaRequest {
     private Long idUsuario;
 
     @NotNull
-    private Long idProduto;
-
-    @NotNull
     private Long idVendedor;
 
     public PerquntaRequest() {
     }
 
-    public PerquntaRequest(String titulo, String descricao, LocalDateTime instanteCriacao, Long idUsuario, Long idProduto, Long idVendedor) {
+    public PerquntaRequest(String titulo, String descricao, LocalDateTime instanteCriacao, Long idUsuario, Long idVendedor) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.instanteCriacao = instanteCriacao;
         this.idUsuario = idUsuario;
-        this.idProduto = idProduto;
         this.idVendedor = idVendedor;
     }
 
@@ -54,10 +50,6 @@ public class PerquntaRequest {
         return idUsuario;
     }
 
-    public Long getIdProduto() {
-        return idProduto;
-    }
-
     public Long getIdVendedor() {
         return idVendedor;
     }
@@ -68,10 +60,6 @@ public class PerquntaRequest {
 
     public void setIdUsuario(Long idUsuario) {
         this.idUsuario = idUsuario;
-    }
-
-    public void setIdProduto(Long idProduto) {
-        this.idProduto = idProduto;
     }
 
     public void setIdVendedor(Long idVendedor) {
@@ -97,7 +85,6 @@ public class PerquntaRequest {
                 ", descricao='" + descricao + '\'' +
                 ", instanteCriacao=" + instanteCriacao +
                 ", idUsuario=" + idUsuario +
-                ", idProduto=" + idProduto +
                 ", idVendedor=" + idVendedor +
                 '}';
 
