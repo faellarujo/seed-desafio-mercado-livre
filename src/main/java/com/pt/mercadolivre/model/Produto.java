@@ -3,9 +3,12 @@ package com.pt.mercadolivre.model;
 import jakarta.persistence.*;
 import jdk.jfr.Enabled;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -19,14 +22,14 @@ public class Produto {
     private String nome;
 
     @Column(name = "valor")
-    private Double valor;
+    private BigDecimal valor;
 
     @Column(name = "quantidade")
     private Integer quantidade;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Caracteristica caracteristica;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<Caracteristica> caracteristica = new HashSet<>();
 
     @Column(name = "descricao")
     private String descricao;
@@ -35,6 +38,9 @@ public class Produto {
     @ManyToOne(cascade = CascadeType.ALL)
     private Categoria categoria;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    private User user;
+
     @Column(name = "instante")
     private LocalDateTime instante = LocalDateTime.now();
 
@@ -42,15 +48,11 @@ public class Produto {
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
     private List<ImagemProduto> linkImagem = new ArrayList<>();
 
-    @OneToOne
-    @JoinColumn(name = "usuario_id")
-    private User usuario;
-
 
     public Produto() {
     }
 
-    public Produto(String nome, Double valor, Integer quantidade, Caracteristica caracteristica, String descricao, Categoria categoria, LocalDateTime instante, ImagemProduto linkImagem, User usuario) {
+    public Produto(String nome, BigDecimal valor, Integer quantidade, Set<Caracteristica> caracteristica, String descricao, Categoria categoria, LocalDateTime instante, ImagemProduto linkImagem, User user) {
         this.nome = nome;
         this.valor = valor;
         this.quantidade = quantidade;
@@ -59,7 +61,9 @@ public class Produto {
         this.categoria = categoria;
         this.instante = instante;
         this.linkImagem.add(linkImagem);
-        this.usuario = usuario;
+        this.user = user;
+
+
     }
 
     public Long getId() {
@@ -79,11 +83,11 @@ public class Produto {
         this.nome = nome;
     }
 
-    public Double getValor() {
+    public BigDecimal getValor() {
         return valor;
     }
 
-    public void setValor(Double valor) {
+    public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
 
@@ -95,11 +99,11 @@ public class Produto {
         this.quantidade = quantidade;
     }
 
-    public Caracteristica getCaracteristica() {
+    public Set<Caracteristica> getCaracteristica() {
         return caracteristica;
     }
 
-    public void setCaracteristica(Caracteristica caracteristica) {
+    public void setCaracteristica(Set<Caracteristica> caracteristica) {
         this.caracteristica = caracteristica;
     }
 
@@ -135,12 +139,12 @@ public class Produto {
         this.linkImagem = linkImagem;
     }
 
-    public User getUsuario() {
-        return usuario;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsuario(User usuario) {
-        this.usuario = usuario;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -155,8 +159,9 @@ public class Produto {
                 ", categoria=" + categoria +
                 ", instante=" + instante +
                 ", linkImagem=" + linkImagem +
-                ", usuario=" + usuario +
+                ", user=" + user +
                 '}';
     }
+
 }
 

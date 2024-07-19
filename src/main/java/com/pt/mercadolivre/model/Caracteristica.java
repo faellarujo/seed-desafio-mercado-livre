@@ -1,7 +1,9 @@
 package com.pt.mercadolivre.model;
 
-
 import jakarta.persistence.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Caracteristica {
@@ -11,58 +13,36 @@ public class Caracteristica {
     private Long id;
 
     @Column(name = "peso")
-    private Double peso;
+    private String nome;
 
     @Column(name = "cor")
-    private String cor;
-
-    @Column(name = "tamanho")
-    @Enumerated(EnumType.STRING)
-    private Tamanho tamanho;
-
+    private String descricao;
 
 
     public Caracteristica() {
     }
 
-
-    public Caracteristica(Double peso, String cor, Tamanho tamanho) {
-        this.peso = peso;
-        this.cor = cor;
-        this.tamanho = tamanho;
+    public Caracteristica(String nome, String descricao) {
+        this.nome = nome;
+        this.descricao = descricao;
     }
 
-    public Double getPeso () {
-        return peso;
+    public String getNome () {
+        return nome;
     }
 
-    public void setPeso(Double peso) {
-        this.peso = peso;
+    public void setNome (String nome){
+        this.nome = nome;
     }
 
-    public String getCor() {
-        return cor;
+    public String getDescricao () {
+        return descricao;
     }
 
-    public void setCor(String cor) {
-        this.cor = cor;
-    }
-
-    public Tamanho getTamanho() {
-        return tamanho;
-    }
-
-    public void setTamanho(Tamanho tamanho) {
-        this.tamanho = tamanho;
-    }
-
-    @Override
-    public String toString() {
-        return "Caracteristica{" +
-                "nome='" + peso + '\'' +
-                ", cor='" + cor + '\'' +
-                ", tamanho=" + tamanho +
-                '}';
+    public void setDescricao (String descricao){
+        this.descricao = descricao;
     }
 
 }
+
+

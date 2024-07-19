@@ -1,12 +1,16 @@
 package com.pt.mercadolivre.Request;
 
 import com.pt.mercadolivre.model.*;
+import com.pt.mercadolivre.validadores.ExistId;
 import jakarta.persistence.EntityManager;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.*;
 
 public class ProdutoRequest {
 
@@ -14,27 +18,26 @@ public class ProdutoRequest {
     private String nome;
 
     @NotNull
-    @Min(1)
-    private Double valor;
+    @Positive
+    private BigDecimal valor;
 
     @NotNull
-    @Min(1)
+    @Positive
     private Integer quantidade;
 
     @NotNull
-    private Long idCaracteristica;
+    @Valid
+    private List<CaracteristicaRequest> caracteristica = new ArrayList<>();
 
     @NotBlank
-    @Size(max = 1000)
+    @Length(max = 1000)
     private String descricao;
 
     @NotNull
+    @ExistId(domainClass = Categoria.class, fieldName = "id")
     private Long idCategoria;
 
     private Long idImagem;
-
-
-    private Long idUsuario;
 
     @NotNull
     @PastOrPresent
@@ -43,16 +46,16 @@ public class ProdutoRequest {
     public ProdutoRequest() {
     }
 
-    public ProdutoRequest(@NotBlank String nome, @NotNull @Min(1) Double valor, @NotNull @Min(1) Integer quantidade, @NotNull Long idCaracteristica, @NotBlank @Size(max = 1000) String descricao, @NotNull Long idCategoria, @NotNull @PastOrPresent LocalDateTime instante, Long idImagem, Long idUsuario) {
+    public ProdutoRequest(@NotBlank String nome, @NotNull @Positive BigDecimal valor, @NotNull @Min(1) Integer quantidade, @NotNull @Valid List<CaracteristicaRequest> caracteristica , @NotBlank @Length(max = 1000) String descricao, @NotNull Long idCategoria, @NotNull @PastOrPresent LocalDateTime instante, Long idImagem) {
+        super();
         this.nome = nome;
         this.valor = valor;
         this.quantidade = quantidade;
-        this.idCaracteristica = idCaracteristica;
+        this.caracteristica.addAll(caracteristica);
         this.descricao = descricao;
         this.idCategoria = idCategoria;
         this.instante = instante;
         this.idImagem = idImagem;
-        this.idUsuario = idUsuario;
     }
 
     public @NotBlank String getNome() {
@@ -63,11 +66,11 @@ public class ProdutoRequest {
         this.nome = nome;
     }
 
-    public @NotNull @Min(1) Double getValor() {
+    public @NotNull @Positive BigDecimal getValor() {
         return valor;
     }
 
-    public void setValor(@NotNull @Min(1) Double valor) {
+    public void setValor(@NotNull @Positive BigDecimal valor) {
         this.valor = valor;
     }
 
@@ -79,13 +82,6 @@ public class ProdutoRequest {
         this.quantidade = quantidade;
     }
 
-    public @NotNull Long getIdCaracteristica() {
-        return idCaracteristica;
-    }
-
-    public void setIdCaracteristica(@NotNull Long idCaracteristica) {
-        this.idCaracteristica = idCaracteristica;
-    }
 
     public @NotBlank @Size(max = 1000) String getDescricao() {
         return descricao;
@@ -119,39 +115,35 @@ public class ProdutoRequest {
         this.idImagem = idImagem;
     }
 
-    public Long getIdUsuario() {
-        return idUsuario;
+    public @NotNull List<CaracteristicaRequest> getCaracteristica() {
+        return caracteristica;
     }
 
-    public void setIdUsuario(Long idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setCaracteristica(@NotNull List<CaracteristicaRequest> caracteristica) {
+        this.caracteristica = caracteristica;
     }
-
 
     @Override
-    public String toString() {
+    public String   toString() {
         return "ProdutoRequest{" +
-                "nome='" + nome + '\'' +
+                "caracteristica=" + caracteristica +
+                ", nome='" + nome + '\'' +
                 ", valor=" + valor +
                 ", quantidade=" + quantidade +
-                ", caracteristica=" + idCaracteristica +
                 ", descricao='" + descricao + '\'' +
                 ", idCategoria=" + idCategoria +
+                ", idImagem=" + idImagem +
                 ", instante=" + instante +
-                   ", idImagem=" + idImagem +
-                     ", idUsuario=" + idUsuario +
                 '}';
     }
 
-    public Produto toModel(EntityManager manager) {
-        Caracteristica caracteristica = manager.find(Caracteristica.class, idCaracteristica);
-        Categoria categoria = manager.find(Categoria.class, idCategoria);
-        Optional<ImagemProduto> imagem = Optional.ofNullable(idImagem).map(id -> manager.find(ImagemProduto.class, id));
-        Optional<User> usuario = Optional.ofNullable(idUsuario).map(id -> manager.find(User.class, id));
-
-        if (caracteristica == null || categoria == null) {
-            throw new IllegalArgumentException("Caracteristica, Categoria, or ImagemProduto not found");
-        }
-        return new Produto(nome, valor, quantidade, caracteristica, descricao, categoria, instante, imagem.orElse(null), usuario.orElse(null));
-    }
+    //    public Produto toModel(EntityManager manager, User user) {
+//        //Set<Caracteristica> caracteristica = Collections.singleton(manager.find(Caracteristica.class, this.caracteristica.get(0).getId();
+//        Categoria categoria = manager.find(Categoria.class, idCategoria);
+//        Optional<ImagemProduto> imagem = Optional.ofNullable(idImagem).map(id -> manager.find(ImagemProduto.class, id));
+//        if (caracteristica == null || categoria == null) {
+//            throw new IllegalArgumentException("Caracteristica, Categoria, or ImagemProduto not found");
+//        }
+//        return new Produto(nome, valor, quantidade, caracteristica, descricao, categoria, instante, imagem.orElse(null), user);
+//    }
 }

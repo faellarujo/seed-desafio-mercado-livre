@@ -1,67 +1,49 @@
 package com.pt.mercadolivre.Request;
 
 import com.pt.mercadolivre.model.Caracteristica;
-import com.pt.mercadolivre.model.Tamanho;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.List;
+
 public class CaracteristicaRequest {
 
-    // Pelo menos 03 atributos
-
-
-    @NotNull
-    private Double peso;
-
     @NotBlank
-    private String cor;
-
-    @NotNull
-    private Tamanho tamanho;
+    private String nome;
+    @NotBlank
+    private String descricao;
 
     public CaracteristicaRequest() {
     }
 
-    public CaracteristicaRequest(@NotNull Double peso, @NotBlank String cor, @NotNull Tamanho tamanho) {
-        this.peso = peso;
-        this.cor = cor;
-        this.tamanho = tamanho;
+    public CaracteristicaRequest(@NotBlank String nome, @NotBlank String descricao) {
+        super();
+        this.nome = nome;
+        this.descricao = descricao;
     }
 
-    public Double getPeso () {
-        return peso;
+
+    public @NotBlank String getNome() {
+        return nome;
     }
 
-    public void setPeso(Double peso) {
-        this.peso = peso;
+    public void setNome(@NotBlank String nome) {
+        this.nome = nome;
     }
 
-    public String getCor() {
-        return cor;
+    public @NotBlank String getDescricao() {
+        return descricao;
     }
 
-    public void setCor(String cor) {
-        this.cor = cor;
-    }
-
-    public Tamanho getTamanho() {
-        return tamanho;
-    }
-
-    public void setTamanho(Tamanho tamanho) {
-        this.tamanho = tamanho;
+    public void setDescricao(@NotBlank String descricao) {
+        this.descricao = descricao;
     }
 
     @Override
     public String toString() {
         return "CaracteristicaRequest{" +
-                "nome='" + peso + '\'' +
-                ", cor='" + cor + '\'' +
-                ", tamanho=" + tamanho +
+                "descricao='" + descricao + '\'' +
+                ", nome='" + nome + '\'' +
                 '}';
-    }
-
-    public Caracteristica toModel() {
-        return new Caracteristica(peso, cor, tamanho);
     }
 }

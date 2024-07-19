@@ -10,6 +10,8 @@ public class ImagemProduto {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
 
+
+    @Column(name = "link_imagem")
     private String linkImagem;
 
     @ManyToOne
