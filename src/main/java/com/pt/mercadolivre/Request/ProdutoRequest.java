@@ -26,6 +26,7 @@ public class ProdutoRequest {
     private Integer quantidade;
 
     @NotNull
+    @Size(min = 3)
     @Valid
     private List<CaracteristicaRequest> caracteristica = new ArrayList<>();
 
@@ -115,7 +116,7 @@ public class ProdutoRequest {
         this.idImagem = idImagem;
     }
 
-    public @NotNull List<CaracteristicaRequest> getCaracteristica() {
+    public @NotNull List<CaracteristicaRequest> getCaracteristicas() {
         return caracteristica;
     }
 
@@ -135,6 +136,16 @@ public class ProdutoRequest {
                 ", idImagem=" + idImagem +
                 ", instante=" + instante +
                 '}';
+    }
+
+    public boolean temCaracteristicasIguais() {
+        HashSet<String> nomesIguais = new HashSet<>();
+        for (CaracteristicaRequest caracteristica : caracteristica) {
+            if (!nomesIguais.add(caracteristica.getNome())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     //    public Produto toModel(EntityManager manager, User user) {

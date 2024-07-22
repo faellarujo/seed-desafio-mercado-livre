@@ -4,6 +4,7 @@ import com.pt.mercadolivre.Request.ProdutoRequest;
 import com.pt.mercadolivre.model.Produto;
 import com.pt.mercadolivre.service.AuthenticationService;
 import com.pt.mercadolivre.service.UserService;
+import com.pt.mercadolivre.validadores.ProibeCaracteristicasComNomesIguaisValidator;
 import com.pt.mercadolivre.views.DetalesDoProdutoView;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -11,10 +12,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,9 +31,12 @@ public class ProdutoController {
     @Autowired
     private UserService userService;
 
+    @InitBinder
+    public void init(WebDataBinder binder){
+        binder.addValidators(new ProibeCaracteristicasComNomesIguaisValidator());
+    }
 
     @PostMapping("/produto")
-    @Transactional
     public String cadastrarProduto(@RequestBody @Valid ProdutoRequest request){
         return request.toString();
     }
