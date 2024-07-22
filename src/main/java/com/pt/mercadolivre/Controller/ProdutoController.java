@@ -7,7 +7,6 @@ import com.pt.mercadolivre.service.UserService;
 import com.pt.mercadolivre.validadores.ProibeCaracteristicasComNomesIguaisValidator;
 import com.pt.mercadolivre.views.DetalesDoProdutoView;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

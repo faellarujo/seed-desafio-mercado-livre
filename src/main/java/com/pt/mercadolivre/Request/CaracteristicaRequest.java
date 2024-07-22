@@ -1,6 +1,7 @@
 package com.pt.mercadolivre.Request;
 
 import com.pt.mercadolivre.model.Caracteristica;
+import com.pt.mercadolivre.model.Produto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -45,5 +46,9 @@ public class CaracteristicaRequest {
                 "descricao='" + descricao + '\'' +
                 ", nome='" + nome + '\'' +
                 '}';
+    }
+
+    public Caracteristica toModel(Produto produto){
+        return new Caracteristica(nome, descricao, produto);
     }
 }

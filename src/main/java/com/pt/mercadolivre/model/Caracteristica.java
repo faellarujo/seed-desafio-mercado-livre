@@ -18,13 +18,17 @@ public class Caracteristica {
     @Column(name = "cor")
     private String descricao;
 
+    @ManyToOne
+    private Produto produto;
+
 
     public Caracteristica() {
     }
 
-    public Caracteristica(String nome, String descricao) {
+    public Caracteristica(String nome, String descricao, Produto produto) {
         this.nome = nome;
         this.descricao = descricao;
+        this.produto = produto;
     }
 
     public String getNome () {
@@ -41,6 +45,14 @@ public class Caracteristica {
 
     public void setDescricao (String descricao){
         this.descricao = descricao;
+    }
+
+    public Produto getProduto () {
+        return produto;
+    }
+
+    public void setProduto (Produto produto){
+        this.produto = produto;
     }
 
 }

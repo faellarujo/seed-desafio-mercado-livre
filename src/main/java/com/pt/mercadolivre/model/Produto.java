@@ -1,14 +1,16 @@
 package com.pt.mercadolivre.model;
 
+import com.pt.mercadolivre.Request.CaracteristicaRequest;
 import jakarta.persistence.*;
-import jdk.jfr.Enabled;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.Length;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @Entity
@@ -28,7 +30,7 @@ public class Produto {
     private Integer quantidade;
 
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.PERSIST)
     private Set<Caracteristica> caracteristica = new HashSet<>();
 
     @Column(name = "descricao")
@@ -52,17 +54,28 @@ public class Produto {
     public Produto() {
     }
 
-    public Produto(String nome, BigDecimal valor, Integer quantidade, Set<Caracteristica> caracteristica, String descricao, Categoria categoria, LocalDateTime instante, ImagemProduto linkImagem, User user) {
+//    public Produto(String nome, BigDecimal valor, Integer quantidade, Set<Caracteristica> caracteristica, String descricao, Categoria categoria, LocalDateTime instante, ImagemProduto linkImagem, User user) {
+//        this.nome = nome;
+//        this.valor = valor;
+//        this.quantidade = quantidade;
+//        this.caracteristica = caracteristica;
+//        this.descricao = descricao;
+//        this.categoria = categoria;
+//        this.instante = instante;
+//        this.linkImagem.add(linkImagem);
+//        this.user = user;
+//
+//    }
+
+    public Produto(String nome, BigDecimal valor, Integer quantidade, List<Caracteristica> caracteristica, String descricao, Categoria categoria, LocalDateTime instante, User user) {
         this.nome = nome;
         this.valor = valor;
         this.quantidade = quantidade;
-        this.caracteristica = caracteristica;
+        this.caracteristica.addAll(caracteristica.stream().map(caracteristica1 -> new Caracteristica(caracteristica1.getNome(), caracteristica1.getDescricao(), this)).collect(Collectors.toSet()));
         this.descricao = descricao;
         this.categoria = categoria;
         this.instante = instante;
-        this.linkImagem.add(linkImagem);
         this.user = user;
-
 
     }
 
