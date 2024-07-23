@@ -1,5 +1,6 @@
 package com.pt.mercadolivre.Controller;
 
+import com.pt.mercadolivre.Request.NovasImagensRequest;
 import com.pt.mercadolivre.Request.ProdutoRequest;
 import com.pt.mercadolivre.model.Produto;
 import com.pt.mercadolivre.model.User;
@@ -33,7 +34,7 @@ public class ProdutoController {
     @Autowired
     private UserService userService;
 
-    @InitBinder
+    @InitBinder(value = "produtoRequest")
     public void init(WebDataBinder binder){
         binder.addValidators(new ProibeCaracteristicasComNomesIguaisValidator());
     }
@@ -46,6 +47,24 @@ public class ProdutoController {
         manager.persist(produto);
         return request.toString();
     }
+
+
+    @PostMapping("/produto/{id}/imagens")
+    @Transactional
+    public void adicionaImagens(@PathVariable("id") Long id, @Valid NovasImagensRequest novasImagensRequest){
+
+        /**
+         * 1 - Enviar imagens para o servidor
+         * 2 - PEgar o link de todas as imagens
+         * 3 - Associar esses links com o produto
+         * 4 - Preciso carregar o produto
+         * 5 - Depois que associar eu preciso atualizar a nova versao do produto
+         *
+         */
+
+    }
+
+
 
 //    @PostMapping("/produto")
 //    @Transactional
