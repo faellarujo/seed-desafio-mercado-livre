@@ -6,6 +6,7 @@ import com.pt.mercadolivre.model.Produto;
 import com.pt.mercadolivre.model.User;
 import com.pt.mercadolivre.service.AuthenticationService;
 import com.pt.mercadolivre.service.UserService;
+import com.pt.mercadolivre.util.UploaderFake;
 import com.pt.mercadolivre.validadores.ProibeCaracteristicasComNomesIguaisValidator;
 import com.pt.mercadolivre.views.DetalesDoProdutoView;
 import jakarta.persistence.EntityManager;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -33,6 +35,11 @@ public class ProdutoController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UploaderFake uploaderFake;
+
+
 
     @InitBinder(value = "produtoRequest")
     public void init(WebDataBinder binder){
@@ -61,6 +68,12 @@ public class ProdutoController {
          * 5 - Depois que associar eu preciso atualizar a nova versao do produto
          *
          */
+
+         Set<String> links = UploaderFake.envia(novasImagensRequest.getImagens());
+         links.forEach(link -> System.out.println("Link: " + link));
+
+
+
 
     }
 
