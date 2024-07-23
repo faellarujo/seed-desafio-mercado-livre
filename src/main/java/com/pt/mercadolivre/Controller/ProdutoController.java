@@ -2,15 +2,18 @@ package com.pt.mercadolivre.Controller;
 
 import com.pt.mercadolivre.Request.ProdutoRequest;
 import com.pt.mercadolivre.model.Produto;
+import com.pt.mercadolivre.model.User;
 import com.pt.mercadolivre.service.AuthenticationService;
 import com.pt.mercadolivre.service.UserService;
 import com.pt.mercadolivre.validadores.ProibeCaracteristicasComNomesIguaisValidator;
 import com.pt.mercadolivre.views.DetalesDoProdutoView;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +39,11 @@ public class ProdutoController {
     }
 
     @PostMapping("/produto")
-    public String cadastrarProduto(@RequestBody @Valid ProdutoRequest request){
+    @Transactional
+    public String cadastrarProduto(@RequestBody @Valid ProdutoRequest request, Authentication authentication){
+        User user = userService.findByusername(authentication.getName());
+        Produto produto = request.toModel(manager, user);
+        manager.persist(produto);
         return request.toString();
     }
 

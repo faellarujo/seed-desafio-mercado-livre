@@ -12,10 +12,10 @@ public class Caracteristica {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "peso")
+    @Column(name = "nome")
     private String nome;
 
-    @Column(name = "cor")
+    @Column(name = "descricao")
     private String descricao;
 
     @ManyToOne
