@@ -25,19 +25,15 @@ public class OpiniaoRequest {
     private String descricao;
 
     @NotNull
-    private Long idProduto;
-
-    @NotNull
     private Long idUsuario;
 
     public OpiniaoRequest() {
     }
 
-    public OpiniaoRequest(int nota, String titulo, String descricao, Long idProduto, Long idUsuario) {
+    public OpiniaoRequest(int nota, String titulo, String descricao, Long idUsuario) {
         this.nota = nota;
         this.titulo = titulo;
         this.descricao = descricao;
-        this.idProduto = idProduto;
         this.idUsuario = idUsuario;
     }
 
@@ -53,10 +49,6 @@ public class OpiniaoRequest {
         return descricao;
     }
 
-    public Long getIdProduto() {
-        return idProduto;
-    }
-
     public Long getIdUsuario() {
         return idUsuario;
     }
@@ -67,7 +59,6 @@ public class OpiniaoRequest {
                 "nota=" + nota +
                 ", titulo='" + titulo + '\'' +
                 ", descricao='" + descricao + '\'' +
-                ", idProduto=" + idProduto +
                 ", idUsuario=" + idUsuario +
                 '}';
     }

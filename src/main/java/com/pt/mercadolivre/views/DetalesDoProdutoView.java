@@ -30,6 +30,10 @@ public class DetalesDoProdutoView {
     private List<String> imagens = new ArrayList<>();
     private List<CaracteristicasDetalhesView> caracteristicas = new ArrayList<>();
     private List<OpiniaoDoProdutoDetalheView> opinioes = new ArrayList<>();
+    private double mediaNota;
+    private int numeroTotaldeNotas;
+
+
 
     public DetalesDoProdutoView(Produto produto, EntityManager manager) {
         this.manager = manager;
@@ -50,6 +54,9 @@ public class DetalesDoProdutoView {
                 .map(CaracteristicasDetalhesView::new)
                 .collect(Collectors.toList());
         this.opinioes =  opinioesDoProduto(produto);
+        this.mediaNota = calcularMedia(opinioes);
+        this.numeroTotaldeNotas = opinioes.size();
+
     }
 
     private List<OpiniaoDoProdutoDetalheView> opinioesDoProduto(Produto produto) {
@@ -60,6 +67,13 @@ public class DetalesDoProdutoView {
         return opinioes.stream()
                 .map(OpiniaoDoProdutoDetalheView::new)
                 .collect(Collectors.toList());
+    }
+
+    private double calcularMedia(List<OpiniaoDoProdutoDetalheView> opinioes) {
+        return opinioes.stream()
+                .mapToInt(OpiniaoDoProdutoDetalheView::getNota)
+                .average()
+                .orElse(0.0);
     }
 
     public String getDescricao() {
@@ -132,5 +146,12 @@ public class DetalesDoProdutoView {
 
     public void setOpinioes(List<OpiniaoDoProdutoDetalheView> opinioes) {
         this.opinioes = opinioes;
+    }
+    public double getMediaNota() {
+        return mediaNota;
+    }
+
+    public int getNumeroTotaldeNotas() {
+        return numeroTotaldeNotas;
     }
 }

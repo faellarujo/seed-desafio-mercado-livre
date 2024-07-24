@@ -3,6 +3,9 @@ package com.pt.mercadolivre.model;
 import jakarta.persistence.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 public class User{
@@ -21,6 +24,14 @@ public class User{
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Opiniao> opinioes = new ArrayList<>();
+
+
+    public void setOpinioes(List<Opiniao> opinioes) {
+        this.opinioes = opinioes;
+    }
 
     public User() {
     }
@@ -49,5 +60,9 @@ public class User{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Opiniao> getOpinioes() {
+        return opinioes;
     }
 }

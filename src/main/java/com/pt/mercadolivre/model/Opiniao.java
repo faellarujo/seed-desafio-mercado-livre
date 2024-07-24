@@ -2,10 +2,6 @@ package com.pt.mercadolivre.model;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-
-import java.util.Optional;
 
 @Entity
 public class Opiniao {
@@ -24,11 +20,10 @@ public class Opiniao {
     @Column(name = "nota")
     private int nota;
 
-    @OneToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Produto produto;
 
-
-    @OneToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private User usuario;
 
 

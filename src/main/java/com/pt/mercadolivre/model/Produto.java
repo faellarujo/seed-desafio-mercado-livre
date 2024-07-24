@@ -50,6 +50,8 @@ public class Produto {
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
     private List<ImagemProduto> linkImagem = new ArrayList<>();
 
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
+    private List<Opiniao> opinioes = new ArrayList<>();
 
     public Produto() {
     }
@@ -158,6 +160,14 @@ public class Produto {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Opiniao> getOpinioes() {
+        return opinioes;
+    }
+
+    public void setOpinioes(List<Opiniao> opinioes) {
+        this.opinioes = opinioes;
     }
 
     @Override
