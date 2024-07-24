@@ -22,15 +22,22 @@ public class Pergunta {
     @ManyToOne
     private Vendedor vendedor;
 
+    @ManyToOne
+    private Produto produto;
+
+    public Produto getProduto() {
+        return produto;
+    }
 
     public Pergunta() {
     }
 
-    public Pergunta(String titulo, String descricao, User usuario, Vendedor vendedor) {
+    public Pergunta(String titulo, String descricao, User usuario, Vendedor vendedor, Produto produto) {
         this.titulo = titulo;
         this.descricao = descricao;
         this.usuario = usuario;
         this.vendedor = vendedor;
+        this.produto = produto;
     }
 
     public String getTitulo() {
@@ -64,6 +71,7 @@ public class Pergunta {
     public void setVendedor(Vendedor vendedor) {
         this.vendedor = vendedor;
     }
+
 
     @Override
     public String toString() {

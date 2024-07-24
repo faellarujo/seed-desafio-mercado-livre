@@ -53,6 +53,10 @@ public class Produto {
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
     private List<Opiniao> opinioes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
+    private List<Pergunta> perguntas = new ArrayList<>();
+
+
     public Produto() {
     }
 
@@ -168,6 +172,10 @@ public class Produto {
 
     public void setOpinioes(List<Opiniao> opinioes) {
         this.opinioes = opinioes;
+    }
+
+    public List<Pergunta> getPerguntas() {
+        return perguntas;
     }
 
     @Override

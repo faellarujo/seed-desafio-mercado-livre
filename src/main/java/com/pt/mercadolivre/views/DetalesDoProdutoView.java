@@ -1,9 +1,6 @@
 package com.pt.mercadolivre.views;
 
-import com.pt.mercadolivre.model.ImagemProduto;
-import com.pt.mercadolivre.model.Opiniao;
-import com.pt.mercadolivre.model.Produto;
-import com.pt.mercadolivre.model.User;
+import com.pt.mercadolivre.model.*;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -32,8 +29,7 @@ public class DetalesDoProdutoView {
     private List<OpiniaoDoProdutoDetalheView> opinioes = new ArrayList<>();
     private double mediaNota;
     private int numeroTotaldeNotas;
-
-
+    private List<PerguntasAoVendedorView> perguntas = new ArrayList<>();
 
     public DetalesDoProdutoView(Produto produto, EntityManager manager) {
         this.manager = manager;
@@ -54,6 +50,9 @@ public class DetalesDoProdutoView {
                 .map(CaracteristicasDetalhesView::new)
                 .collect(Collectors.toList());
         this.opinioes =  opinioesDoProduto(produto);
+        this.perguntas = produto.getPerguntas().stream()
+                .map(PerguntasAoVendedorView::new)
+                .collect(Collectors.toList());
         this.mediaNota = calcularMedia(opinioes);
         this.numeroTotaldeNotas = opinioes.size();
 
@@ -153,5 +152,13 @@ public class DetalesDoProdutoView {
 
     public int getNumeroTotaldeNotas() {
         return numeroTotaldeNotas;
+    }
+
+    public void setPerguntas(List<PerguntasAoVendedorView> perguntas) {
+        this.perguntas = perguntas;
+    }
+
+    public List<PerguntasAoVendedorView> getPerguntas() {
+        return perguntas;
     }
 }

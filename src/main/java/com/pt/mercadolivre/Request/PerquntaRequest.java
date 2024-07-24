@@ -91,7 +91,7 @@ public class PerquntaRequest {
     }
 
     public Pergunta toModel(Produto produto, Vendedor vendedor, User user) {
-        return new Pergunta(titulo, descricao, user, vendedor);
+        return new Pergunta(titulo, descricao, user, vendedor, produto);
     }
 
 
