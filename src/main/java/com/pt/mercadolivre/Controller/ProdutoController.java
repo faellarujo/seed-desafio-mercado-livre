@@ -2,6 +2,7 @@ package com.pt.mercadolivre.Controller;
 
 import com.pt.mercadolivre.Request.NovasImagensRequest;
 import com.pt.mercadolivre.Request.ProdutoRequest;
+import com.pt.mercadolivre.model.ImagemProduto;
 import com.pt.mercadolivre.model.Produto;
 import com.pt.mercadolivre.model.User;
 import com.pt.mercadolivre.service.AuthenticationService;
@@ -62,7 +63,7 @@ public class ProdutoController {
 
         /**
          * 1 - Enviar imagens para o servidor
-         * 2 - PEgar o link de todas as imagens
+         * 2 - Pegar o link de todas as imagens
          * 3 - Associar esses links com o produto
          * 4 - Preciso carregar o produto
          * 5 - Depois que associar eu preciso atualizar a nova versao do produto
@@ -72,32 +73,27 @@ public class ProdutoController {
          Set<String> links = UploaderFake.envia(novasImagensRequest.getImagens());
          links.forEach(link -> System.out.println("Link: " + link));
 
-
-
-
+        final Produto produto = manager.find(Produto.class, id);
+        links.stream().map(link -> new ImagemProduto(link, produto)).forEach(manager::persist);
     }
 
-
-
-//    @PostMapping("/produto")
-//    @Transactional
-//    public ResponseEntity<DetalesDoProdutoView> cadastrarProduto(@RequestBody @Valid ProdutoRequest request, Authentication authentication){
-//        final User byusername = userService.findByusername(authentication.getName());
-//        final Produto produto = request.toModel(manager, byusername);
-//        DetalesDoProdutoView detalesDoProdutoView = new DetalesDoProdutoView(produto);
-//        detalesDoProdutoView.setProduto(produto);
-//        manager.persist(produto);
-//        return ResponseEntity.status(HttpStatus.CREATED).body(detalesDoProdutoView);
-//    }
 
     @GetMapping(value = "/produtos")
     public ResponseEntity<List<DetalesDoProdutoView>> listarProdutos(){
         //final User byusername = userService.findByusername(authentication.getName());
         List<Produto> listaDeProdutos = manager.createQuery("select p from Produto p", Produto.class).getResultList();
         List<DetalesDoProdutoView> listaDeDetalhesDoProduto = listaDeProdutos.stream()
-                .map(DetalesDoProdutoView::new)
+                .map(produto -> new DetalesDoProdutoView(produto, manager))
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(listaDeDetalhesDoProduto);
+    }
+
+
+    @GetMapping(value = "/produto/{id}/detalhes")
+    public ResponseEntity<DetalesDoProdutoView> detalhesDoProduto(@PathVariable Long id){
+        final Produto produto = manager.find(Produto.class, id);
+        DetalesDoProdutoView detalhesDoProdutoView = new DetalesDoProdutoView(produto, manager);
+        return ResponseEntity.ok(detalhesDoProdutoView);
     }
 
 }

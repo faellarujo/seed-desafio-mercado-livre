@@ -3,6 +3,7 @@ package com.pt.mercadolivre.Request;
 
 import com.pt.mercadolivre.model.User;
 import com.pt.mercadolivre.model.User;
+import com.pt.mercadolivre.validadores.UniqueValue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -17,6 +18,7 @@ public class UsuarioRequest {
     @NotBlank
     @NotNull
     @Email
+    @UniqueValue(domainClass = User.class, fieldName = "username")
     private String username;
 
     @NotBlank

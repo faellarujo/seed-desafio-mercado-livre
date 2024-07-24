@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 public class UploaderFake {
     public static Set<String> envia(List<MultipartFile> imagem) {
         return imagem.stream()
-                .map(im -> "http://bucket.io/" + im.getOriginalFilename() + "-" + UUID.randomUUID().toString())
+                .map(im -> "http://bucket.io/" + im.getOriginalFilename())
                 .collect(Collectors.toSet());
     }
 }

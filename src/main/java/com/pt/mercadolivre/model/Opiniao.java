@@ -31,6 +31,7 @@ public class Opiniao {
     @OneToOne
     private User usuario;
 
+
     public Opiniao() {
     }
 
