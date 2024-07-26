@@ -6,13 +6,14 @@ import com.pt.mercadolivre.model.TipodePagamento;
 import com.pt.mercadolivre.model.User;
 import com.pt.mercadolivre.util.TipodePagamentoDeserializer;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public class CompraRequest {
 
-
+    @NotNull
     private Long idProduto;
 
-    @NotNull
+    @Positive
     private Integer quantidade;
     private User comprador;
 
