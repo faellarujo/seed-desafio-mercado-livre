@@ -76,11 +76,11 @@ public class CustomValidationExceptionHandler {
     public ResponseEntity<String> quantidadeInsulficiente(QuantidadeInsulficienteException ex) {
         return ResponseEntity.status(400).body(ex.getMessage());
     }
-//
-//    @ExceptionHandler(CupomExisteException.class)//1
-//    public ResponseEntity<String> IllegalStateException(CupomExisteException ex) {
-//        return ResponseEntity.status(400).body(ex.getMessage());
-//    }
+
+    @ExceptionHandler(TipoDePagamentoInexistente.class)//1
+    public ResponseEntity<String> tipoDePagamentoInexistente(TipoDePagamentoInexistente ex) {
+        return ResponseEntity.status(400).body(ex.getMessage());
+    }
 //
 //    @ExceptionHandler(CupomDataException.class)//1
 //    public ResponseEntity<String> IllegalStateException(CupomDataException ex) {

@@ -4,11 +4,15 @@ package com.pt.mercadolivre.Controller;
 import com.pt.mercadolivre.Request.CompraRequest;
 import com.pt.mercadolivre.exception.ProdutoNotExistException;
 import com.pt.mercadolivre.exception.QuantidadeInsulficienteException;
+import com.pt.mercadolivre.exception.TipoDePagamentoInexistente;
 import com.pt.mercadolivre.model.Produto;
+import com.pt.mercadolivre.model.StatusDaCompra;
+import com.pt.mercadolivre.model.TipodePagamento;
 import com.pt.mercadolivre.model.User;
 import com.pt.mercadolivre.repository.ProdutoRepository;
 import com.pt.mercadolivre.repository.UsuarioRepository;
 import com.pt.mercadolivre.service.ProdutoService;
+import com.pt.mercadolivre.util.EnviaEmail;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -63,6 +67,16 @@ public class CompraController {
 
         // Recupera o comprador
         final User comprador = usuarioRepository.findByUsername(authentication.getName()).get();
+
+
+        // Envia email para o dono do produto
+        new EnviaEmail().enviaEmail("dona@gmail.com", "Pedido de compra", "O usuário " + comprador.getUsername() + " Tem interesse no produto " + produto.get().getNome());
+
+        // Iniciado o status da compra
+        System.out.println("Status da compra: " + StatusDaCompra.INICIADA.toString());
+
+        // Verifica o tipo de pagamento escolhido esta sendo validado na borda com uma customização de deserialização
+
         return request.toString();
     }
 

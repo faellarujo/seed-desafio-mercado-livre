@@ -1,7 +1,10 @@
 package com.pt.mercadolivre.Request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.pt.mercadolivre.model.TipodePagamento;
 import com.pt.mercadolivre.model.User;
+import com.pt.mercadolivre.util.TipodePagamentoDeserializer;
 import jakarta.validation.constraints.NotNull;
 
 public class CompraRequest {
@@ -12,6 +15,8 @@ public class CompraRequest {
     @NotNull
     private Integer quantidade;
     private User comprador;
+
+    @JsonDeserialize(using = TipodePagamentoDeserializer.class)
     private TipodePagamento gateway;
 
     public void setGateway(TipodePagamento gateway) {
