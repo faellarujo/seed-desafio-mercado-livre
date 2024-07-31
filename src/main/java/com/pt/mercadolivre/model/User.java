@@ -28,6 +28,9 @@ public class User{
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Opiniao> opinioes = new ArrayList<>();
 
+    @OneToMany
+    @JoinColumn(name = "compra_id")
+    private List<Compra> compra;
 
     public void setOpinioes(List<Opiniao> opinioes) {
         this.opinioes = opinioes;
