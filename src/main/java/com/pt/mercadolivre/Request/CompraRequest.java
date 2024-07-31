@@ -2,12 +2,15 @@ package com.pt.mercadolivre.Request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.pt.mercadolivre.model.TipodePagamento;
-import com.pt.mercadolivre.model.User;
+import com.pt.mercadolivre.model.*;
 import com.pt.mercadolivre.util.TipodePagamentoDeserializer;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class CompraRequest {
 
@@ -78,5 +81,13 @@ public class CompraRequest {
         return gateway;
     }
 
+    public Compra toModel(EntityManager entityManager, Produto produto, User comprador) {
+        //Produto produto = entityManager.find(Produto.class, idProduto);
+        Set<Produto> produtos = Set.of(produto);
+        String gateway = this.gateway.toString();
+        StatusDaCompra status = StatusDaCompra.INICIADA;
+        return new Compra(gateway, produtos, comprador, status);
 
-}
+}}
+
+

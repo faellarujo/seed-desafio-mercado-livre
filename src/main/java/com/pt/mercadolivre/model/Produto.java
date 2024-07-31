@@ -1,19 +1,14 @@
 package com.pt.mercadolivre.model;
 
-import com.pt.mercadolivre.Request.CaracteristicaRequest;
 import com.pt.mercadolivre.exception.QuantidadeInsulficienteException;
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 @Entity
@@ -59,10 +54,12 @@ public class Produto {
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL)
     private List<Pergunta> perguntas = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "produto", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "produtos")
     private Set<Compra> compra;
 
-
+    public void setPerguntas(List<Pergunta> perguntas) {
+        this.perguntas = perguntas;
+    }
 
     public Produto() {
     }
@@ -185,6 +182,14 @@ public class Produto {
         return perguntas;
     }
 
+    public Set<Compra> getCompra() {
+        return compra;
+    }
+
+    public void setCompra(Set<Compra> compra) {
+        this.compra = compra;
+    }
+
     @Override
     public String toString() {
         return "Produto{" +
@@ -204,7 +209,7 @@ public class Produto {
 
     public boolean abateEstoque(@Positive Integer quantidade) {
         Assert.isTrue(quantidade > 0, "A quantidade deve ser maior que zero para abater o estoque" + quantidade);
-        if (quantidade < this.quantidade){
+        if (quantidade > this.quantidade){
             throw new QuantidadeInsulficienteException("Quantidade maior que o estoque");
         }
         this.quantidade -= quantidade;

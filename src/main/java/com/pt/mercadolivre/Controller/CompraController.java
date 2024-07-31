@@ -3,6 +3,7 @@ package com.pt.mercadolivre.Controller;
 
 import com.pt.mercadolivre.Request.CompraRequest;
 import com.pt.mercadolivre.exception.ProdutoNotExistException;
+import com.pt.mercadolivre.model.Compra;
 import com.pt.mercadolivre.model.Produto;
 import com.pt.mercadolivre.model.StatusDaCompra;
 import com.pt.mercadolivre.model.User;
@@ -10,6 +11,8 @@ import com.pt.mercadolivre.repository.ProdutoRepository;
 import com.pt.mercadolivre.repository.UsuarioRepository;
 import com.pt.mercadolivre.service.ProdutoService;
 import com.pt.mercadolivre.util.EnviaEmail;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +53,9 @@ public class CompraController {
     @Autowired
     private ProdutoService produtoService;
 
+    @PersistenceContext
+    EntityManager entityManager;
+
 
     @PostMapping("/produto/{id}/compra")
     @Transactional
@@ -73,6 +79,11 @@ public class CompraController {
         // Iniciado o status da compra
         System.out.println("Status da compra: " + StatusDaCompra.INICIADA.toString());
 
+        // Cria a entidade Compra e persiste no banco de dados
+        Compra compra = request.toModel(entityManager, produto.get(), comprador);
+        entityManager.persist(compra);
+
+
         // Verifica o tipo de pagamento escolhido esta sendo validado na borda com uma customização de deserialização
 
         if (request.getGateway().equals(request.getGateway().PAYPAL)) {
@@ -88,6 +99,11 @@ public class CompraController {
         }
 
 
+
+
+
+
     }
+
 
 }

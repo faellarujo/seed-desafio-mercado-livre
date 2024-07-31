@@ -1,51 +1,41 @@
 package com.pt.mercadolivre.model;
 
 import jakarta.persistence.*;
-
-import java.util.List;
 import java.util.Set;
 
 @Entity
 public class Compra {
 
     @Id
-    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
 
     private String gateway;
 
-
-    @ManyToMany
-    @JoinTable(name = "compra_produto",
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "compra_produto",
             joinColumns = @JoinColumn(name = "compra_id"),
-            inverseJoinColumns = @JoinColumn(name = "produto_id"))
-    private Set<Produto> produto;
+            inverseJoinColumns = @JoinColumn(name = "produto_id")
+    )
+    private Set<Produto> produtos;
 
-
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     private User comprador;
 
-
+    @Enumerated(EnumType.STRING)
     private StatusDaCompra statusDaCompra;
 
-    public Compra(String gateway, Set<Produto> produto, User comprador, StatusDaCompra statusDaCompra) {
-        this.gateway = gateway;
-        this.produto = produto;
-        this.comprador = comprador;
-        this.statusDaCompra = statusDaCompra;
-    }
-
-    public Long getId() {
-        return id;
-    }
+//    public Long getId() {
+//        return id;
+//    }
 
     public String getGateway() {
         return gateway;
     }
 
-    public Set<Produto> getProduto() {
-        return produto;
+    public Set<Produto> getProdutos() {
+        return produtos;
     }
 
     public User getComprador() {
@@ -54,5 +44,15 @@ public class Compra {
 
     public StatusDaCompra getStatusDaCompra() {
         return statusDaCompra;
+    }
+
+    public Compra() {
+    }
+
+    public Compra(String gateway, Set<Produto> produtos, User comprador, StatusDaCompra statusDaCompra) {
+        this.gateway = gateway;
+        this.produtos = produtos;
+        this.comprador = comprador;
+        this.statusDaCompra = statusDaCompra;
     }
 }
