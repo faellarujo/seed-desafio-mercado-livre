@@ -2,11 +2,13 @@ package com.pt.mercadolivre.Controller;
 
 
 import com.pt.mercadolivre.Request.CompraRequest;
+import com.pt.mercadolivre.Request.PagueSeguroRequest;
 import com.pt.mercadolivre.exception.ProdutoNotExistException;
 import com.pt.mercadolivre.model.Compra;
 import com.pt.mercadolivre.model.Produto;
 import com.pt.mercadolivre.model.StatusDaCompra;
 import com.pt.mercadolivre.model.User;
+import com.pt.mercadolivre.repository.CompraRepossitory;
 import com.pt.mercadolivre.repository.ProdutoRepository;
 import com.pt.mercadolivre.repository.UsuarioRepository;
 import com.pt.mercadolivre.service.ProdutoService;
@@ -16,6 +18,9 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,9 +62,13 @@ public class CompraController {
     EntityManager entityManager;
 
 
+    @Autowired
+    private CompraRepossitory compraRepossitory;
+
+
     @PostMapping("/produto/{id}/compra")
     @Transactional
-    public String pagamento(@RequestBody @Valid CompraRequest request, @PathVariable Long id, Authentication authentication) throws URISyntaxException {
+    public ResponseEntity<String> pagamento(@RequestBody @Valid CompraRequest request, @PathVariable Long id, Authentication authentication) throws URISyntaxException {
 
         // recupera o produto pelo id
         final Optional<Produto> produto = produtoRepository.findById(id);
@@ -67,7 +76,7 @@ public class CompraController {
 
         //verifica a quantidade em estoque e abate se possivel
 
-         produto.get().abateEstoque(request.getQuantidade());
+        produto.get().abateEstoque(request.getQuantidade());
 
         // Recupera o comprador
         final User comprador = usuarioRepository.findByUsername(authentication.getName()).get();
@@ -84,25 +93,26 @@ public class CompraController {
         entityManager.persist(compra);
 
 
-        // Verifica o tipo de pagamento escolhido esta sendo validado na borda com uma customização de deserialização
+        // Resposta para o cliente
 
+
+        // Verifica o tipo de pagamento escolhido e retorna a URL de redirecionamento
+        URI redirectUrl;
         if (request.getGateway().equals(request.getGateway().PAYPAL)) {
-            String novaCompraID = "123";
-            String urlTemplate = "paypal.com/novaCompra" + novaCompraID + "?redirectUrl=" + "urlRetornoAppPosPagamento";
-            URI paypal = new URI(urlTemplate);
-            return paypal.toString();
+            String urlTemplate = "https://paypal.com/" + compra.getId() + "?redirectUrl=" + "urlRetornoAppPosPagamento";
+            redirectUrl = new URI(urlTemplate);
         } else {
-            String novaCompraID = "123";
-            String urlTemplate = "pagseguro.com/novaCompra" + novaCompraID + "?redirectUrl=" + "urlRetornoAppPosPagamento";
-            URI pagseguro = new URI(urlTemplate);
-            return pagseguro.toString();
+            String urlTemplate = "http://localhost:8080/compra/" + compra.getId() +"/" + compra.getStatusDaCompra().toString().toString();
+            redirectUrl = new URI(urlTemplate);
         }
 
+        return new ResponseEntity<>(HttpStatus.FOUND);
 
+    }
 
-
-
-
+    @PostMapping("/compra/{id}/")
+    public String statusCompra(@PathVariable Long id, PagueSeguroRequest request, Authentication authentication) {
+        return request.toString();
     }
 
 

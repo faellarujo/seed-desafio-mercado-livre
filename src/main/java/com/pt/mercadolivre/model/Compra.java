@@ -26,9 +26,9 @@ public class Compra {
     @Enumerated(EnumType.STRING)
     private StatusDaCompra statusDaCompra;
 
-//    public Long getId() {
-//        return id;
-//    }
+    public Long getId() {
+        return id;
+    }
 
     public String getGateway() {
         return gateway;
