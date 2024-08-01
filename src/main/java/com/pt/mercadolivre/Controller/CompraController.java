@@ -110,10 +110,4 @@ public class CompraController {
 
     }
 
-    @PostMapping("/compra/{id}/")
-    public String statusCompra(@PathVariable Long id, PagueSeguroRequest request, Authentication authentication) {
-        return request.toString();
-    }
-
-
 }

@@ -1,5 +1,6 @@
 package com.pt.mercadolivre.model;
 
+import com.pt.mercadolivre.Request.PagueSeguroRequest;
 import jakarta.persistence.*;
 import java.util.Set;
 
@@ -25,6 +26,8 @@ public class Compra {
 
     @Enumerated(EnumType.STRING)
     private StatusDaCompra statusDaCompra;
+
+    private Transacao transacao;
 
     public Long getId() {
         return id;
@@ -54,5 +57,9 @@ public class Compra {
         this.produtos = produtos;
         this.comprador = comprador;
         this.statusDaCompra = statusDaCompra;
+    }
+
+    public void tentativaDePagamento(PagueSeguroRequest request) {
+        this.transacao = new Transacao(request.getStatus(), request.getIdTransacao());
     }
 }
