@@ -2,6 +2,8 @@ package com.pt.mercadolivre.model;
 
 import com.pt.mercadolivre.Request.PagueSeguroRequest;
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -16,7 +18,7 @@ public class Compra {
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "compra_produto",
-            joinColumns = @JoinColumn(name = "compra_id"),
+            joinColumns = @JoinColumn(referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "produto_id")
     )
     private Set<Produto> produtos;
@@ -27,7 +29,14 @@ public class Compra {
     @Enumerated(EnumType.STRING)
     private StatusDaCompra statusDaCompra;
 
+    public void setStatusDaCompra(StatusDaCompra statusDaCompra) {
+        this.statusDaCompra = statusDaCompra;
+    }
+
+    @OneToOne
+    @JoinColumn(name = "transacao_id")
     private Transacao transacao;
+
 
     public Long getId() {
         return id;
@@ -49,6 +58,14 @@ public class Compra {
         return statusDaCompra;
     }
 
+    public Transacao getTransacao() {
+        return transacao;
+    }
+
+    public void setTransacao(Transacao transacao) {
+        this.transacao = transacao;
+    }
+
     public Compra() {
     }
 
@@ -59,7 +76,15 @@ public class Compra {
         this.statusDaCompra = statusDaCompra;
     }
 
-    public void tentativaDePagamento(PagueSeguroRequest request) {
-        this.transacao = new Transacao(request.getStatus(), request.getIdTransacao());
+
+    public void tentativaDePagamento(PagueSeguroRequest request, EntityManager entityManager) {
+        Transacao transacao = new Transacao(request.getStatus(), request.getIdTransacao(), LocalDateTime.now(), this);
+        if (request.getStatus().equals(StautsRetornoPagueSeguro.SUCESSO)) {
+            entityManager.persist(transacao);
+            this.setStatusDaCompra(StatusDaCompra.SUCESSO);
+        } else {
+            this.setStatusDaCompra(StatusDaCompra.ERRO);
+        }
+        this.transacao = transacao;
     }
 }

@@ -1,7 +1,10 @@
 package com.pt.mercadolivre.model;
 
 public enum StatusDaCompra {
-    INICIADA
+    INICIADA, SUCESSO, ERRO
+
+
+
 
 
 }
