@@ -39,7 +39,8 @@ public class SetorNotaFiscalRequest {
                 '}';
     }
 
-    private void comunicaAoSetoDeNotasFiscais(Compra compra) {
+    public void comunicaAoSetoDeNotasFiscais(Long idCompra, Long idUsuario) {
+        System.out.println("comunicado ao setor fiscal" + "ID da Compra: "+ idCompra  + "Id do usuario: " + idUsuario);
 
     }
 

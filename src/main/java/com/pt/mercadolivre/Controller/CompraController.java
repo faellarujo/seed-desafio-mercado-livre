@@ -22,6 +22,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.header.Header;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -66,22 +67,18 @@ public class CompraController {
     private CompraRepossitory compraRepossitory;
 
 
-    @PostMapping("/produto/{id}/compra")
+    @PostMapping("/produto/compra/")
     @Transactional
-    public ResponseEntity<String> pagamento(@RequestBody @Valid CompraRequest request, @PathVariable Long id, Authentication authentication) throws URISyntaxException {
-
+    public ResponseEntity<String> pagamento(@RequestBody @Valid CompraRequest request, Authentication authentication) throws URISyntaxException {
         // recupera o produto pelo id
-        final Optional<Produto> produto = produtoRepository.findById(id);
+        final Optional<Produto> produto = produtoRepository.findById(request.getIdProduto());
         Optional.ofNullable(produto).orElseThrow(() -> new ProdutoNotExistException("Produto não encontrado"));
 
-        //verifica a quantidade em estoque e abate se possivel
-
+        // verifica a quantidade em estoque e abate se possivel
         produto.get().abateEstoque(request.getQuantidade());
 
         // Recupera o comprador
         final User comprador = usuarioRepository.findByUsername(authentication.getName()).get();
-
-
         // Envia email para o dono do produto
         new EnviaEmail().enviaEmail("dona@gmail.com", "Pedido de compra", "O usuário " + comprador.getUsername() + " Tem interesse no produto " + produto.get().getNome());
 
@@ -92,22 +89,16 @@ public class CompraController {
         Compra compra = request.toModel(entityManager, produto.get(), comprador);
         entityManager.persist(compra);
 
-
-        // Resposta para o cliente
-
-
         // Verifica o tipo de pagamento escolhido e retorna a URL de redirecionamento
         URI redirectUrl;
         if (request.getGateway().equals(request.getGateway().PAYPAL)) {
             String urlTemplate = "https://paypal.com/" + compra.getId() + "?redirectUrl=" + "urlRetornoAppPosPagamento";
-            redirectUrl = new URI(urlTemplate);
+            redirectUrl = URI.create(urlTemplate);
         } else {
-            String urlTemplate = "http://localhost:8080/compra/" + compra.getId() +"/" + compra.getStatusDaCompra().toString().toString();
-            redirectUrl = new URI(urlTemplate);
+            String urlTemplate = "https://pagseguro.com/" + compra.getId() + "/" + comprador.getId() + "/";
+            redirectUrl = URI.create(urlTemplate);
         }
-
-        return new ResponseEntity<>(HttpStatus.FOUND);
-
+        return new ResponseEntity<>(redirectUrl.toString(), HttpStatus.FOUND);
     }
 
 }
