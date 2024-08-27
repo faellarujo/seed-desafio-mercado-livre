@@ -20,7 +20,6 @@ public class FinalizaCompraController {
     EntityManager manager;
 
 
-
     @PostMapping("/compra/retorno-pagueseguro/{id}/")
     @Transactional
     public String statusCompra(@PathVariable Long id, PagueSeguroRequest request, Authentication authentication) {
@@ -44,8 +43,5 @@ public class FinalizaCompraController {
         request.comunicaAoSetoDeNotasFiscais(idCompra, idUsuario);
         return request.toString();
     }
-
-
-
 
 }
